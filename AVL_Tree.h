@@ -6,6 +6,8 @@ public:
 
     AVLTree(const AVLTree& tree) = delete;
 
+    AVLTree& operator=(const AVLTree& tree) = delete;
+
     ~AVLTree(){
         deleteNodes(root);
     }
@@ -18,12 +20,20 @@ public:
         return &(result->value);
     }
 
-    void insert(const Key& key, const Value& value){
+    bool insert(const Key& key, const Value& value){
+        if(find(key) != nullptr){
+            return false;
+        }
         root = insertNode(root, key, value);
+        return true;
     }
 
-    void remove(const Key& key){
-        deleteNode(root, key);
+    bool remove(const Key& key){
+        if(find(key) == nullptr){
+            return false;
+        }
+        root = removeNode(root, key);
+        return true;
     }
 
 private:
@@ -31,9 +41,46 @@ private:
         Key key;
         Value value;
         Node *left, *right;
+        int height;
     };
+
+    int getHeight(Node *node) const {
+        if(node == nullptr){
+            return -1;
+        }
+        return node->height;
+    }
+
+    void updateHeight(Node *node){
+        int leftHeight = getHeight(node->left);
+        int rightHeight = getHeight(node->right);
+        node->height = ((leftHeight > rightHeight) ? leftHeight : rightHeight) + 1;
+    }
+
+    int calcBF(Node *node) const {
+        if(node == nullptr){
+            return 0;
+        }
+        return getHeight(node->left) - getHeight(node->right);
+    }
     
     Node *root;
+
+    void swapNodes(Node *root, Node *pivot, Node *pivotParent){
+        Node *pivotRight = pivot->right;
+        if(pivotParent == root){
+            pivot->right = root;
+        }else{
+            pivotParent->left = root;
+            pivot->right = root->right;
+        }
+        pivot->left = root->left;
+        root->left = nullptr;
+        root->right = pivotRight;
+        int pivotHeight = pivot->height;
+        pivot->height = root->height;
+        root->height = pivotHeight;
+    }
 
     Node* findNode(Node *node, const Key& key){
         if(node == nullptr || node->key == key){
@@ -48,13 +95,15 @@ private:
 
     Node* insertNode(Node *node, const Key& key, const Value& value){
         if(node == nullptr){
-            return new Node{key, value, nullptr, nullptr};
+            return new Node{key, value, nullptr, nullptr, 0};
         }
         if(key < node->key){
             node->left = insertNode(node->left, key, value);
         }else if(key > node->key){
             node->right = insertNode(node->right, key, value);
         }
+        updateHeight(node);
+        // Rotations check
         return node;
     }
 
@@ -81,21 +130,15 @@ private:
             }
             Node *pivot = node->right, *pivotParent = node;
             while(pivot->left != nullptr){
+                pivotParent = pivot;
                 pivot = pivot->left;
-                if(pivotParent == node){
-                    pivotParent = pivotParent->right;
-                }else{
-                    pivotParent = pivotParent->left;
-                }
             }
-            if(pivotParent != node){
-                pivotParent->left = pivot->right;
-                pivot->right = node->right;
-            }
-            pivot->left = node->left;
-            delete node;
-            return pivot;
+            swapNodes(node, pivot, pivotParent);
+            node = pivot;
+            node->right = removeNode(node->right, key);
         }
+        updateHeight(node);
+        // Rotations check
         return node;
     }
 
