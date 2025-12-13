@@ -44,6 +44,8 @@ private:
         int height;
     };
 
+    Node *root;
+
     int getHeight(Node *node) const {
         if(node == nullptr){
             return -1;
@@ -63,8 +65,54 @@ private:
         }
         return getHeight(node->left) - getHeight(node->right);
     }
-    
-    Node *root;
+
+    Node* LLRotation(Node *root){
+        Node *a = root->left;
+        root->left = a->right;
+        a->right = root;
+        updateHeight(root);
+        updateHeight(a);
+        return a;
+    }
+
+    Node* RRRotation(Node *root){
+        Node *a = root->right;
+        root->right = a->left;
+        a->left = root;
+        updateHeight(root);
+        updateHeight(a);
+        return a;
+    }
+
+    Node* LRRotation(Node *root){
+        Node *a = root->left;
+        root->left = RRRotation(a);
+        return LLRotation(root);
+    }
+
+    Node* RLRotation(Node *root){
+        Node *a = root->right;
+        root->right = LLRotation(a);
+        return RRRotation(root);
+    }
+
+    Node* rebalanceTree(Node *root){
+        int rootBF = calcBF(root);
+        if(rootBF == 2){
+            if(calcBF(root->left) > -1){
+                return LLRotation(root);
+            }else{
+                return LRRotation(root);
+            }
+        }else if(rootBF == -2){
+            if(calcBF(root->right) < 1){
+                return RRRotation(root);
+            }else{
+                return RLRotation(root);
+            }
+        }
+        return root;
+    }
 
     void swapNodes(Node *root, Node *pivot, Node *pivotParent){
         Node *pivotRight = pivot->right;
@@ -103,8 +151,7 @@ private:
             node->right = insertNode(node->right, key, value);
         }
         updateHeight(node);
-        // Rotations check
-        return node;
+        return rebalanceTree(node);
     }
 
     Node* removeNode(Node *node, const Key& key){
@@ -138,8 +185,7 @@ private:
             node->right = removeNode(node->right, key);
         }
         updateHeight(node);
-        // Rotations check
-        return node;
+        return rebalanceTree(node);
     }
 
     void deleteNodes(Node *node){
