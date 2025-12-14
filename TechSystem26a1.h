@@ -14,12 +14,18 @@
 #define TechSystem26WINTER_WET1_H_
 
 #include "wet1util.h"
+#include "AVLTree.h"
+#include "Student.h"
+#include "Course.h"
+#include <memory>
 
 class TechSystem {
 private:
-    //
-    // Here you may add anything you want
-    //
+    AVLTree<int, std::shared_ptr<Student>> students;
+    AVLTree<int, std::shared_ptr<Course>> courses;
+    int deansBonus;
+
+    bool isValidInput(int input) const;
     
 public:
     // <DO-NOT-MODIFY> {

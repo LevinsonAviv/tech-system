@@ -1,3 +1,5 @@
+#pragma once
+
 template <class Key, class Value>
 class AVLTree{
 
@@ -14,6 +16,14 @@ public:
 
     Value* find(const Key& key){
         Node *result = findNode(root, key);
+        if(result == nullptr){
+            return nullptr;
+        }
+        return &(result->value);
+    }
+
+    const Value* find(const Key& key) const {
+        const Node *result = findNode(root, key);
         if(result == nullptr){
             return nullptr;
         }
@@ -135,6 +145,17 @@ private:
     }
 
     Node* findNode(Node *node, const Key& key){
+        if(node == nullptr || node->key == key){
+            return node;
+        }
+        if(key < node->key){
+            return findNode(node->left, key);
+        }else{
+            return findNode(node->right, key);
+        }
+    }
+
+    const Node* findNode(const Node *node, const Key& key) const{
         if(node == nullptr || node->key == key){
             return node;
         }

@@ -4,21 +4,21 @@ Student::Student(int id, int currentBonus) : id(id), coursesNum(0), points(-curr
 
 int Student::getId() const{
     return id;
-};
+}
 
 void Student::addCourse(){
     coursesNum++;
-};
+}
 
-void Student::completeCourse(float points){
+void Student::completeCourse(int points){
     this->points += points;
     coursesNum--;
-};
+}
 
 bool Student::hasCourses() const{
     return coursesNum != 0;
-};
+}
 
-float Student::getPoints() const{
+int Student::getPoints() const{
     return points;
-};
+}

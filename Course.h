@@ -2,10 +2,11 @@
 
 #include "Student.h"
 #include "AVLTree.h"
+#include <memory>
 
 class Course{
 public:
-    Course(int id, float point);
+    Course(int id, int point);
 
     Course(const Course& course) = delete;
 
@@ -15,16 +16,16 @@ public:
 
     int getId() const;
 
-    float getPoints() const;
+    int getPoints() const;
 
-    bool enrollStudent(Student *student, int studentId);
+    bool enrollStudent(int studentId, std::shared_ptr<Student> student);
 
-    bool completeStudent(Student *student, int studentId);
+    bool completeStudent(int studentId);
 
     bool hasStudents() const;
 
 private:
     const int id;
-    const float points;
-    AVLTree<int, Student*> students;
+    const int points;
+    AVLTree<int, std::shared_ptr<Student>> students;
 };

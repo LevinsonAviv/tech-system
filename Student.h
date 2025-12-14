@@ -14,14 +14,14 @@ public:
 
     void addCourse();
 
-    void completeCourse(float points);
+    void completeCourse(int points);
 
     bool hasCourses() const;
 
-    float getPoints() const;
+    int getPoints() const;
 
 private:
     const int id;
     int coursesNum;
-    float points;
+    int points;
 };
