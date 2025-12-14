@@ -17,7 +17,7 @@ StatusType TechSystem::addStudent(int studentId)
             return StatusType::SUCCESS;
         }
         return StatusType::FAILURE;
-    }catch(std::bad_alloc){
+    }catch(std::bad_alloc& e){
         return StatusType::ALLOCATION_ERROR;
     }
 }
@@ -33,7 +33,7 @@ StatusType TechSystem::removeStudent(int studentId)
             return StatusType::FAILURE;
         }
         return StatusType::SUCCESS;
-    }catch(std::bad_alloc){
+    }catch(std::bad_alloc& e){
         return StatusType::ALLOCATION_ERROR;
     }
 }
@@ -49,7 +49,7 @@ StatusType TechSystem::addCourse(int courseId, int points)
         }else{
             return StatusType::FAILURE;
         }
-    }catch(std::bad_alloc){
+    }catch(std::bad_alloc& e){
         return StatusType::ALLOCATION_ERROR;
     }
 }
@@ -65,7 +65,7 @@ StatusType TechSystem::removeCourse(int courseId)
             return StatusType::FAILURE;
         }
         return StatusType::SUCCESS;
-    }catch(std::bad_alloc){
+    }catch(std::bad_alloc& e){
         return StatusType::ALLOCATION_ERROR;
     }
 }
@@ -83,7 +83,7 @@ StatusType TechSystem::enrollStudent(int studentId, int courseId)
         }else{
             return StatusType::SUCCESS;
         }
-    }catch(std::bad_alloc){
+    }catch(std::bad_alloc& e){
         return StatusType::ALLOCATION_ERROR;
     }
 }
@@ -99,7 +99,7 @@ StatusType TechSystem::completeCourse(int studentId, int courseId)
             return StatusType::FAILURE;
         }
         return StatusType::SUCCESS;
-    }catch(std::bad_alloc){
+    }catch(std::bad_alloc& e){
         return StatusType::ALLOCATION_ERROR;
     }
 }
@@ -112,7 +112,7 @@ StatusType TechSystem::awardAcademicPoints(int points)
         }
         deansBonus += points;
         return StatusType::SUCCESS;
-    }catch(std::bad_alloc){
+    }catch(std::bad_alloc& e){
         return StatusType::ALLOCATION_ERROR;
     }
 }
@@ -128,7 +128,7 @@ output_t<int> TechSystem::getStudentPoints(int studentId)
             return output_t<int>(StatusType::FAILURE);
         }
         return output_t<int>((*studentPtr)->getPoints() + deansBonus);
-    }catch(std::bad_alloc){
+    }catch(std::bad_alloc& e){
         return StatusType::ALLOCATION_ERROR;
     }
 }
