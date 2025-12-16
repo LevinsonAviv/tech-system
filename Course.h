@@ -6,7 +6,7 @@
 
 class Course{
 public:
-    Course(int id, int point);
+    Course(int id, int points);
 
     Course(const Course& course) = delete;
 
