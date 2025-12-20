@@ -21,10 +21,26 @@
 
 class TechSystem {
 private:
+    /**
+     * @brief an AVL tree of the shared_ptr of the students in the system.
+    */
     AVLTree<int, std::shared_ptr<Student>> students;
+
+    /**
+     * @brief an AVL tree of the shared_ptr of the courses in the system.
+    */
     AVLTree<int, std::shared_ptr<Course>> courses;
+
+    /**
+     * @brief the current deans bonus.
+    */
     int deansBonus;
 
+    /**
+     * @brief checks if an input is valid.
+     * 
+     * @return true if the input is valid or false otherwise.
+    */
     bool isValidInput(int input) const;
     
 public:
